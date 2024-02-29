@@ -11,6 +11,7 @@ import (
 	"github.com/srodrmendz/api-auth/repository"
 )
 
+// Create new auth service
 func New(repository repository.Repository, jwtSecretKey string) *AuthService {
 	return &AuthService{
 		repository:   repository,
@@ -18,7 +19,9 @@ func New(repository repository.Repository, jwtSecretKey string) *AuthService {
 	}
 }
 
+// Authenticate user
 func (s *AuthService) Authenticate(ctx context.Context, email string, password string) (*model.AuthResponse, error) {
+	// First authenticate email and password on repository
 	user, err := s.repository.Authenticate(ctx, email, password)
 	if err != nil {
 		return nil, err
@@ -28,6 +31,7 @@ func (s *AuthService) Authenticate(ctx context.Context, email string, password s
 
 	expires := now.Add(expiresAt)
 
+	// Create JWT
 	token, err := s.generateJwt(user.Email, user.UserName, now, expires)
 	if err != nil {
 		return nil, err
@@ -40,8 +44,10 @@ func (s *AuthService) Authenticate(ctx context.Context, email string, password s
 	}, nil
 }
 
+// Generate JWT
 func (s *AuthService) generateJwt(email string, username string, issuedAt, expires time.Time) (*string, error) {
-	claims := jwtClaim{
+	// First create claims
+	claims := model.JWTClaim{
 		Username: username,
 		Email:    email,
 		StandardClaims: jwt.StandardClaims{
@@ -52,8 +58,9 @@ func (s *AuthService) generateJwt(email string, username string, issuedAt, expir
 		},
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
+	// Sign token with secret key
 	tk, err := token.SignedString([]byte(s.jwtSecretKey))
 	if err != nil {
 		return nil, fmt.Errorf("signing jwt token %w", err)
