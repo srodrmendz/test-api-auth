@@ -14,12 +14,12 @@ import (
 func New(authService service.Service, router *mux.Router, path string, secretKey string, version string, buildDate string) *App {
 	app := &App{
 		Services: services{
-			authService: authService,
+			AuthService: authService,
 		},
 		Config: config{
-			version:   version,
-			buildDate: buildDate,
-			secretKey: secretKey,
+			Version:   version,
+			BuildDate: buildDate,
+			SecretKey: secretKey,
 		},
 		Router: router,
 	}
@@ -44,7 +44,7 @@ func New(authService service.Service, router *mux.Router, path string, secretKey
 	// Swagger doc
 	docs.SwaggerInfo.Title = "Auth API"
 	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.BasePath = "/auth"
+	docs.SwaggerInfo.BasePath = path
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	return app

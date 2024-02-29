@@ -27,11 +27,11 @@ func TestService_GenerateJWT(t *testing.T) {
 	// When
 	token, err := srv.generateJwt(email, username, time.Now(), time.Now().Add(expiresAt))
 
-	// Then
 	require.NoError(t, err)
 
 	assert.NotNil(t, token)
 
+	// Then
 	claims, err := utils.GetClaimsFromToken(*token, secretKey)
 
 	require.NoError(t, err)

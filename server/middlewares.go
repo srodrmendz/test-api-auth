@@ -43,7 +43,7 @@ func (a *App) authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		if _, err := utils.GetClaimsFromToken(spl[1], a.Config.secretKey); err != nil {
+		if _, err := utils.GetClaimsFromToken(spl[1], a.Config.SecretKey); err != nil {
 			utils.ErrJSON(w, http.StatusUnauthorized, errors.New("unauthorized"))
 
 			return

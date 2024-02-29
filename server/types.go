@@ -8,13 +8,13 @@ import (
 const bearerTokenHeaderLength = 2
 
 type services struct {
-	authService service.Service
+	AuthService service.Service
 }
 
 type config struct {
-	version   string
-	buildDate string
-	secretKey string
+	Version   string
+	BuildDate string
+	SecretKey string
 }
 
 type App struct {

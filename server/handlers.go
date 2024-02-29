@@ -19,8 +19,8 @@ import (
 // @Router /health-check [get]
 func (a *App) healthCheck(w http.ResponseWriter, _ *http.Request) {
 	response := map[string]string{
-		"version":      a.Config.version,
-		"build_date":   a.Config.buildDate,
+		"version":      a.Config.Version,
+		"build_date":   a.Config.BuildDate,
 		"service_name": "api-auth",
 	}
 
@@ -52,7 +52,7 @@ func (a *App) authenticate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := a.Services.authService.Authenticate(r.Context(), request.Email, request.Password)
+	resp, err := a.Services.AuthService.Authenticate(r.Context(), request.Email, request.Password)
 	if err != nil {
 		if errors.Is(err, internalErrors.ErrUserNotFound) {
 			utils.ErrJSON(w, http.StatusUnauthorized, err)
